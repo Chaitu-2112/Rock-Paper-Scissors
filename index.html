@@ -5,50 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors Game</title>
     <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .game-container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(196, 43, 43, 0.96);
+        body{
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
             text-align: center;
-        }
 
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
+            
         }
-
-        button {
-            padding: 12px 20px;
-            margin: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
+        p{
+            font-size: 35px;
+        }
+        h1{
+            background-color:hsl(206, 100%, 50%);;
+            
+            color: black;
+            font-size: 100px;
+            font-display: fallback;
+            background-size: 10px 10px;
+            
+        }
+        .Scissors{
+            size: 10px 10px;
+            margin:20px ;
+            
+        }
+        .Paper{
+            margin: 20px;
+        }
+        .Rock{
+            margin: 20px;
+        }
+        button{
             cursor: pointer;
-            transition: background-color 0.5s ease-in-out ;
+            position: relative;
+            transition: all 0.5s ease;
+            border-radius: 10px 30%;
         }
-
-        button:hover {
-            background-color: #45a049;
+        button:hover{
+            box-shadow:0 0 100px hsl(177, 100%, 50%),0 0 200px #6200ea;
+            transform: scale(1.05);
         }
-
-        .scoreboard {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #555;
+        .Reset{
+            margin: 20px;
+            margin-top: 40px;
         }
+        
     </style>
+    
 </head>
 <body>
     <div class="game-container">
@@ -66,10 +69,11 @@
                 result = 'You Win!';
                 score.Win++;
             }
-            
-            alert(`You picked rock . Computer picked ${computerMove}. hence the result is ${result} \n  Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`);
-            
-            ">Rock</button>
+            localStorage.setItem('score', JSON.stringify(score));
+            document.querySelector('.js-score').innerText=` Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`
+            document.querySelector('.result').innerText=` ${result}`;
+            choice('rock')
+            " class="Rock"><img src="images/icons8-rock-50.png" width="120" height="120"></button>
         <button onclick="
             computerPlay()
         
@@ -82,9 +86,12 @@
             } else if (computerMove === 'scissors'){
                 result = 'You Lose';
                 score.Lose++
-                }
-                alert(`You picked Paper . Computer picked ${computerMove}. hence the result is ${result} \n  Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`);
-        ">Paper</button>
+            }
+            localStorage.setItem('score', JSON.stringify(score));
+            document.querySelector('.js-score').innerText=` Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`
+            document.querySelector('.result').innerText=` ${result}`;
+            choice('Paper')
+        " class="paper"><img src="images/icons8-paper-50.png" width="120" height="120"></button>
         <button onclick="
             computerPlay()
             
@@ -92,24 +99,43 @@
                 result = 'You Lose';
                 score.Lose++
             } else if (computerMove === 'paper'){
-                result = 'Its a Win';
+                result = 'You Win';
                 score.Win++
             } else if (computerMove === 'scissors'){
-                result = 'Its a tie';
+                result = 'Its a Tie';
                 score.Tie++
             }
-            alert(`You picked Scissors . Computer picked ${computerMove}. hence the result is ${result} \n  Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`);
-        ">Scissors</button>
+            localStorage.setItem('score', JSON.stringify(score));
+            document.querySelector('.js-score').innerText=` Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`;
+            document.querySelector('.result').innerText=` ${result}`;
+            choice('scissors')
+        " class="Scissors"><img  src="images/icons8-scissors-50.png" width="120" height="120"></button>
+        <p class="result"></p>
+
+
+        <p class="choice">
+        </p>
+
+
+
+
+        <p class="js-score"></p>
+
+
+
         <button onclick="
             score.Win=0;
             score.Lose=0;
             score.Tie=0;
-            
-            alert(`Your Score has been reset . hence the Score is ${result} \n  Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`);
-            "   >Reset Score</button>
+            localStorage.removeItem('score');
+            document.querySelector('.js-score').innerText=` Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`
+            document.querySelector('.result').innerText=` Your Score has been reset Thank You for Playing.`;
+            document.querySelector('.choice').innerText=` Your choice is to reset the score`;
+            " class="Reset"  ><img src="images/reset.png" width="120" height="120"</button>
         <script>
             
-            let score={
+            
+            let score= JSON.parse(localStorage.getItem("score"))||{
                 Win:0,Lose:0,Tie:0
             };
             let computerMove=' ';
@@ -124,11 +150,13 @@
                 } else if (randomNumber >2/3 && randomNumber <=1){
                     computerMove='scissors';
                 }
-                return "hehe"
+                
             }
             localStorage.setItem("score",JSON.stringify(score));
-
-        
+            document.querySelector(".js-score").innerText=` Wins: ${score.Win} Lose: ${score.Lose} Ties: ${score.Tie}`
+            function choice(userChoice){ 
+                document.querySelector('.choice').innerHTML=` Your choice is: <img src="images/icons8-${userChoice}-50.png" width="50" height="50"> and Computer choice is:<img src="images/icons8-${computerMove}-50.png" width="50" height="50">`;
+            }
         </script>
         
         
